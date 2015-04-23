@@ -39,6 +39,12 @@
          <artifactId>infinispan-query</artifactId>
          <version>7.1.1.Final</version>
       </dependency>
+
+      <dependency>
+         <groupId>javax.websocket</groupId>
+         <artifactId>javax.websocket-api</artifactId>
+         <version>1.1</version>
+      </dependency>
    </dependencies>
 
    <!-- Build management and other plugins -->

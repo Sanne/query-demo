@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>WebSocket Clustered Example</title>
+</head>
+<body>
+
+<h3>Tell us who you'd like to vote for!!</h3>
+
+<!-- Input form -->
+<form>
+    <fieldset>
+        <label>Find root:</label>
+        <input id="baseNumber" type="text">
+        <input type="submit" id="findRoot" value="findRoot">
+    </fieldset>
+</form>
+
+<h4>The square root of your number is: <span id="rootResult"></span></h4>
+
+<script>
+    var port = "";
+    var url = 'ws://' + window.location.host + port + window.location
+        .pathname + 'squareRoot'
+
+    var ws = new WebSocket(url);
+
+    document.getElementById("findRoot").onclick = function(event){
+      event.preventDefault();
+      var base = document.getElementById("baseNumber").value;
+      ws.send(base);
+    };
+
+    ws.onconnect = function(e) {
+      console.log("Connected up!");
+    };
+
+    ws.onerror = function(e) {
+      console.log("Error somewhere: " + e);
+    };
+
+    ws.onclose = function(e) {
+      console.log("Host has closed the connection");
+      console.log(e);
+    };
+
+    ws.onmessage = function(e) {
+      document.getElementById("rootResult").innerHTML = e.data;
+    };
+
+
+
+</script>
+</body>
