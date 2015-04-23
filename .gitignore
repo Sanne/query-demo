@@ -16,5 +16,7 @@ target/*
 
 # IntelliJ files
 *.iml
+.idea
+.idea/*
 
 
