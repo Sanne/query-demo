@@ -21,7 +21,7 @@
       <version.war.plugin>2.1.1</version.war.plugin>
 
       <!-- Name of the war file -->
-      <build.final.name>wsocket-cluster</build.final.name>
+      <build.final.name>ispn-query-demo</build.final.name>
       <version.jboss.javaee.web>2.0.0.Final</version.jboss.javaee.web>
    </properties>
 

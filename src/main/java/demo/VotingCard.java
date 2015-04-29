@@ -17,6 +17,9 @@ public class VotingCard {
 
 	@Field
 	int voterAge;
+
+	@Field
+	String voterName;
 	
 	@Field
 	Date votingTime;
