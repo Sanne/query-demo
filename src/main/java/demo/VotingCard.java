@@ -8,24 +8,32 @@ import org.hibernate.search.annotations.IndexedEmbedded;
 
 @Indexed
 public class VotingCard {
-	
-	@IndexedEmbedded
-	Candidate voteForSenate;
+
+	public VotingCard(SenatorCandidate voteForSenate, GovernorCandidate voteForGovernor, int voterAge, String voterName, Date votingTime, String votingStation) {
+		this.voteForSenate = voteForSenate;
+		this.voteForGovernor = voteForGovernor;
+		this.voterAge = voterAge;
+		this.voterName = voterName;
+		this.votingTime = votingTime;
+		this.votingStation = votingStation;
+	}
 
 	@IndexedEmbedded
-	Candidate voteForGovernor;
+	public final SenatorCandidate voteForSenate;
+
+	@IndexedEmbedded
+	public final GovernorCandidate voteForGovernor;
 
 	@Field
-	int voterAge;
+	public final int voterAge;
 
 	@Field
-	String voterName;
-	
+	public final String voterName;
+
 	@Field
-	Date votingTime;
-	
+	public final Date votingTime;
+
 	@Field
-	String votingStation;
-	
+	public final String votingStation;
 
 }

@@ -5,16 +5,20 @@ import org.hibernate.search.annotations.Indexed;
 
 @Indexed
 public class Candidate {
-	
-	@Field
-	String name;
+
+	Candidate(String name, String party, String district) {
+		this.name = name;
+		this.party = party;
+		this.district = district;
+	}
 
 	@Field
-	String party;
-	
+	public final String name;
+
 	@Field
-	String district;
-	
+	public final String party;
+
 	@Field
-	Office runningfor;
+	public final String district;
+
 }
