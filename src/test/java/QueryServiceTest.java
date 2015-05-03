@@ -22,7 +22,7 @@ public class QueryServiceTest {
 	@BeforeClass
 	public static void startInfinispan() throws IOException {
 		defaultCacheManager = new DefaultCacheManager( "localonly-infinispan.xml" );
-		votingCache = new VotingCacheManagement(defaultCacheManager.getCache("Votes"), "Geecon One");
+		votingCache = new VotingCacheManagement(defaultCacheManager.getCache("Votes"));
 	}
 
 	@AfterClass
@@ -43,7 +43,8 @@ public class QueryServiceTest {
 			Assert.assertNull(vote);
 		}
 		{
-			votingCache.storeVote("007", 62, "James Bond", CandidatesDatabase.HomerSimpson, CandidatesDatabase.MargeSimpson);
+			votingCache.storeVote("007", 62, "James Bond", CandidatesDatabase
+					.HomerSimpson, CandidatesDatabase.MargeSimpson, "1");
 			VotingCard vote = votingCache.getVote("007");
 			Assert.assertNotNull(vote);
 			Assert.assertEquals("Marge Simpson", vote.governorVote.name);
@@ -77,7 +78,8 @@ public class QueryServiceTest {
 	}
 
 	private void voteForGovernor(GovernorCandidate governor, int i) {
-		votingCache.storeVote("00"+i, 20 + i, "User "+i, CandidatesDatabase.HomerSimpson, governor);
+		votingCache.storeVote("00"+i, 20 + i, "User "+i, CandidatesDatabase
+				.HomerSimpson, governor, "1");
 	}
 
 }

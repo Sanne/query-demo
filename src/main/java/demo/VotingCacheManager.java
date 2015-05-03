@@ -1,11 +1,43 @@
 package demo;
 
 import org.infinispan.Cache;
+import org.infinispan.manager.DefaultCacheManager;
+import org.infinispan.manager.EmbeddedCacheManager;
 
+import java.io.IOException;
+
+
+/**
+ * @author - Sanne Grinovero
+ * @author - @navssurtani
+ */
 public class VotingCacheManager {
 
-	Cache<String,VotingCard> votes;
+	private Cache<String, VotingCard> cache;
+	private static VotingCacheManager instance;
 
-	Cache<String,Candidate> candidates;
+	private VotingCacheManager() {
+		EmbeddedCacheManager cacheManager = null;
+		try {
+			cacheManager = new DefaultCacheManager
+               ("localonly-infinispan.xml");
+		} catch (IOException e) {
+			throw new InstantiationError("Error looking up configuration file " +
+					"for Infinispan");
+		}
+		this.cache = cacheManager.getCache("Votes", true);
+
+	}
+
+	public Cache<String, VotingCard> getCache() {
+		return this.cache;
+	}
+
+	public static VotingCacheManager getInstance() {
+		if (instance == null) {
+			instance = new VotingCacheManager();
+		}
+		return instance;
+	}
 
 }

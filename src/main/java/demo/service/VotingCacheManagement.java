@@ -16,24 +16,29 @@ import org.infinispan.query.SearchManager;
 import demo.GovernorCandidate;
 import demo.SenatorCandidate;
 import demo.VotingCard;
+import org.jboss.logging.Logger;
 
 
 public class VotingCacheManagement {
 
 	private final Cache<String, VotingCard> cache;
-	private final String votingStationName;
+	private static final Logger logger = Logger.getLogger
+			(VotingCacheManagement.class);
 
-	public VotingCacheManagement(Cache<String, VotingCard> cache, String votingStationName) {
+	public VotingCacheManagement(Cache<String, VotingCard> cache) {
 		this.cache = cache;
-		this.votingStationName = votingStationName;
 	}
 
 	private void storeVote(String idVoter, VotingCard vote) {
 		cache.put( idVoter, vote );
 	}
 
-	public void storeVote(String idCardNumber, int voterAge, String voterName, SenatorCandidate voteForSenate, GovernorCandidate voteForGovernor) {
-		VotingCard card = new VotingCard(voteForSenate, voteForGovernor, voterAge, voterName, new Date(), votingStationName );
+	public void storeVote(String idCardNumber, int voterAge, String voterName,
+								 SenatorCandidate voteForSenate,
+								 GovernorCandidate voteForGovernor, String station) {
+		logger.info("About to store vote from " + idCardNumber + " in cache.");
+		VotingCard card = new VotingCard(voteForSenate, voteForGovernor, voterAge,
+				voterName, new Date(), station);
 		storeVote( idCardNumber, card );
 	}
 
