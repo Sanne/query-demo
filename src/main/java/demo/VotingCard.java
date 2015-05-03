@@ -9,9 +9,9 @@ import org.hibernate.search.annotations.IndexedEmbedded;
 @Indexed
 public class VotingCard {
 
-	public VotingCard(SenatorCandidate voteForSenate, GovernorCandidate voteForGovernor, int voterAge, String voterName, Date votingTime, String votingStation) {
-		this.voteForSenate = voteForSenate;
-		this.voteForGovernor = voteForGovernor;
+	public VotingCard(SenatorCandidate senateVote, GovernorCandidate governorVote, int voterAge, String voterName, Date votingTime, String votingStation) {
+		this.senateVote = senateVote;
+		this.governorVote = governorVote;
 		this.voterAge = voterAge;
 		this.voterName = voterName;
 		this.votingTime = votingTime;
@@ -19,10 +19,10 @@ public class VotingCard {
 	}
 
 	@IndexedEmbedded
-	public final SenatorCandidate voteForSenate;
+	public final SenatorCandidate senateVote;
 
 	@IndexedEmbedded
-	public final GovernorCandidate voteForGovernor;
+	public final GovernorCandidate governorVote;
 
 	@Field
 	public final int voterAge;

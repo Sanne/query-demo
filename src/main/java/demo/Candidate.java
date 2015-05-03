@@ -1,5 +1,6 @@
 package demo;
 
+import org.hibernate.search.annotations.Analyze;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
 
@@ -11,10 +12,10 @@ public class Candidate {
 		this.party = party;
 	}
 
-	@Field
+	@Field(analyze=Analyze.NO)
 	public final String name;
 
-	@Field
+	@Field(analyze=Analyze.NO)
 	public final String party;
 
 }
