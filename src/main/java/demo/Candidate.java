@@ -6,10 +6,9 @@ import org.hibernate.search.annotations.Indexed;
 @Indexed
 public class Candidate {
 
-	Candidate(String name, String party, String district) {
+	Candidate(String name, String party) {
 		this.name = name;
 		this.party = party;
-		this.district = district;
 	}
 
 	@Field
@@ -17,8 +16,5 @@ public class Candidate {
 
 	@Field
 	public final String party;
-
-	@Field
-	public final String district;
 
 }
