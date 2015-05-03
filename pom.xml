@@ -51,9 +51,10 @@
       </dependency>
 
       <dependency>
-         <groupId>com.codesnippets4all</groupId>
-         <artifactId>quick-json</artifactId>
-         <version>1.0.4</version>
+         <groupId>org.codehaus.jackson</groupId>
+         <artifactId>jackson-core-asl</artifactId>
+         <version>1.9.13</version>
+         <scope>provided</scope>
       </dependency>
 
       <dependency>
@@ -78,7 +79,12 @@
                <failOnMissingWebXml>false</failOnMissingWebXml>
                <archive>
                   <manifestEntries>
-                     <Dependencies>org.infinispan, org.infinispan.query</Dependencies>
+                     <Dependencies>
+                        org.infinispan,
+                        org.infinispan.query,
+                        org.codehaus.jackson.jackson-xc,
+                        org.codehaus.jackson.jackson-mapper-asl
+                     </Dependencies>
                   </manifestEntries>
                </archive>
             </configuration>
