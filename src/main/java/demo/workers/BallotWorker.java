@@ -21,7 +21,7 @@ import java.util.Map;
  *    "name":"voterName",
  *    "age":"voterAge",
  *    "governorVote":"governorVoteName",
- *    "senatorVote":"senatorVoteName",
+ *    "senateVote":"senatorVoteName",
  *    "regionSelection":1
  *    }
  * @author - @navssurtani
@@ -49,7 +49,7 @@ public class BallotWorker {
       String voterName = (String) parsed.get("name");
       int voterAge = Integer.valueOf((String) parsed.get("age"));
       String governorVoteName = (String) parsed.get("governorVote");
-      String senatorVoteName = (String) parsed.get("senatorVote");
+      String senatorVoteName = (String) parsed.get("senateVote");
 
       GovernorCandidate gov = (GovernorCandidate)
             getCandidateFromName(governorVoteName);
