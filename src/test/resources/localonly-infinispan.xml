@@ -8,7 +8,9 @@
 
       <local-cache name="Votes">
          <transaction mode="NONE"/>
-         <indexing index="ALL" />
+         <indexing index="ALL">
+            <property name="default.directory_provider">ram</property>
+         </indexing>
       </local-cache>
 
    </cache-container>
