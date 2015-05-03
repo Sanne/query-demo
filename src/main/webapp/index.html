@@ -11,38 +11,44 @@
 
 <!-- Input form -->
 <form>
-    <fieldset>
-        <label>Name:</label>
-        <input id="voterName" type="text">
-        <label>Age:</label>
-        <input id="voterAge" type="number">
-    </fieldset>
+  <span>
+    <label style="width: 200px">Name:</label>
+    <input style="width: 200px" id="voterName" type="text">
+    <br/>
+    <label style="width: 200px">Age:</label>
+    <input style="width: 200px" id="voterAge" type="number">
+    <label>Select region: </label>
+    <select name="regionNumbers" id="regionNumbers" style="width: 100px">
+      <option value="0">0</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+    </select>
+  </span>
 
-    <h4>Choose who you would like to vote for Senator</h4>
-    <form id="senatorForm" action="#n" name="senatorForm">
-        <label for="senator">Senator:</label>
-        <input type="radio" name="senator" value="Homer Simpson"> Homer Simpson
-        <input type="radio" name="senator" value="Peter Griffin"> Peter Griffin
-        <input type="radio" name="senator" value="Eric Cartman"> Eric Cartman
-        <input type="radio" name="senator" value="Stan Smith"> Stan Smith
-    </form>
+  <h4>Choose who you would like to vote for Senator</h4>
+  <form id="senatorForm" action="#n" name="senatorForm">
+      <label for="senator">Senator:</label>
+      <input type="radio" name="senator" value="Homer Simpson"> Homer Simpson
+      <input type="radio" name="senator" value="Peter Griffin"> Peter Griffin
+      <input type="radio" name="senator" value="Eric Cartman"> Eric Cartman
+      <input type="radio" name="senator" value="Stan Smith"> Stan Smith
+  </form>
 
-    <h4>Choose who you would like to vote for Governor</h4>
-    <form id="governorForm" action="#n" name="governorForm">
-        <label for="governor">Governor:</label>
-        <input type="radio" name="governor" value="Marge Simpson"> Marge Simpson
-        <input type="radio" name="governor" value="Stewie Griffin"> Stewie Griffin
-        <input type="radio" name="governor" value="Kenny McCormick"> Kenny McCormick
-        <input type="radio" name="governor" value="Hayley Smith"> Hayley Smith
+  <h4>Choose who you would like to vote for Governor</h4>
+  <form id="governorForm" action="#n" name="governorForm">
+      <label for="governor">Governor:</label>
+      <input type="radio" name="governor" value="Marge Simpson"> Marge Simpson
+      <input type="radio" name="governor" value="Stewie Griffin"> Stewie Griffin
+      <input type="radio" name="governor" value="Kenny McCormick"> Kenny McCormick
+      <input type="radio" name="governor" value="Hayley Smith"> Hayley Smith
+  </form>
 
-    </form>
-    <br />
-    <br />
-    <br />
+  <br />
+  <br />
+  <br />
 
-    <input id="vote" type="submit" name="voteSubmit" value="Vote!">
-
-
+  <input id="vote" type="submit" name="voteSubmit" value="Vote!">
 </form>
 
 
@@ -65,7 +71,9 @@
         var senSelection = getRadioSelection("senator");
         console.log("senSelection: " + senSelection);
 
-        toSend = buildJsonToSend(govSelection, senSelection);
+        var regionSelection = getRegionSelection();
+
+        toSend = buildJsonToSend(govSelection, senSelection, regionSelection);
 
         ws.send(JSON.stringify(toSend));
       };
@@ -98,13 +106,17 @@
         }
       }
 
+      function getRegionSelection() {
+        regionElement = document.getElementById("regionNumbers");
+        return regionElement.selectedIndex;
+      }
+
       function buildJsonToSend() {
         var name = document.getElementById("voterName").value;
         var age = document.getElementById("voterAge").value;
 
-        console.log("Name: " + name + " -- Age: " + age);
-
-        json = {"name": name, "age": age, "governorVote": arguments[0], "senatorVote": arguments[1]};
+        json = {"name": name, "age": age,"governorVote": arguments[0],
+            "senatorVote": arguments[1],  "regionSelection": arguments[2]};
         console.log(json);
         return json;
       }

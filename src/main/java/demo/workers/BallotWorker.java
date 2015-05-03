@@ -1,5 +1,10 @@
 package demo.workers;
 
+import com.codesnippets4all.json.parsers.JSONParser;
+import com.codesnippets4all.json.parsers.JsonParserFactory;
+
+import java.util.Map;
+
 /**
  * Class that gets called by the service endpoints when they receive messages.
  * This will then perform the work of creating beans and putting them into
@@ -9,18 +14,13 @@ package demo.workers;
  */
 public class BallotWorker {
 
-   /**
-    * The data that comes from the WS endpoint.
-    */
-   private final String data;
+   public void work(String data) throws Exception {
 
-   public BallotWorker(String data) {
-      this.data = data;
-   }
+      // Parse the string (json) and build the beans from there.
+      JsonParserFactory factory = JsonParserFactory.getInstance();
+      JSONParser parser = factory.newJsonParser();
 
-   public void work() throws Exception {
-
-      // Parse the string and build the beans from there.
+      Map jsonMap = parser.parseJson(data);
 
       // Put the data into the grid.
 

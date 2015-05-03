@@ -1,5 +1,6 @@
 package demo.service;
 
+import demo.workers.BallotWorker;
 import org.jboss.logging.Logger;
 
 import javax.websocket.OnClose;
@@ -32,6 +33,11 @@ public class BasicVoteService {
    @OnMessage
    public void onMessage(String data, Session session) throws IOException {
       logger.log(Logger.Level.INFO, "Received String message: " + data);
+      BallotWorker bw = new BallotWorker();
+      try {
+         bw.work(data);
+      } catch (Exception e) {
+      }
 
    }
 
