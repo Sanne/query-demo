@@ -6,8 +6,8 @@ import org.hibernate.search.annotations.Indexed;
 @Indexed
 public class SenatorCandidate extends Candidate {
 
-	public SenatorCandidate(String name, String party, String district) {
-		super( name, party, district);
+	public SenatorCandidate(String name, String party) {
+		super(name, party);
 	}
 
 	@Field

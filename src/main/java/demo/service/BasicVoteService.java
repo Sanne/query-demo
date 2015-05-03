@@ -32,7 +32,7 @@ public class BasicVoteService {
 
    @OnMessage
    public void onMessage(String data, Session session) throws IOException {
-      logger.log(Logger.Level.INFO, "Received String message: " + data);
+      logger.info("Received String message: " + data);
       BallotWorker bw = new BallotWorker();
       try {
          bw.work(data);
