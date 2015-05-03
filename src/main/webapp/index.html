@@ -1,55 +1,124 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:ng="http://angularjs.org" id="ng-app" ng-app="query-demo">
 <head lang="en">
     <meta charset="UTF-8">
-    <title>WebSocket Clustered Example</title>
+    <title>Time to vote!</title>
 </head>
+
 <body>
 
 <h3>Tell us who you'd like to vote for!!</h3>
 
 <!-- Input form -->
 <form>
-    <fieldset>
-        <label>Find root:</label>
-        <input id="baseNumber" type="text">
-        <input type="submit" id="findRoot" value="findRoot">
-    </fieldset>
+  <span>
+    <label style="width: 200px">Name:</label>
+    <input style="width: 200px" id="voterName" type="text">
+    <br/>
+    <label style="width: 200px">Age:</label>
+    <input style="width: 200px" id="voterAge" type="number">
+    <label>Select region: </label>
+    <select name="regionNumbers" id="regionNumbers" style="width: 100px">
+      <option value="0">0</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+    </select>
+  </span>
+
+  <h4>Choose who you would like to vote for Senator</h4>
+  <form id="senatorForm" action="#n" name="senatorForm">
+      <label for="senator">Senator:</label>
+      <input type="radio" name="senator" value="Homer Simpson"> Homer Simpson
+      <input type="radio" name="senator" value="Peter Griffin"> Peter Griffin
+      <input type="radio" name="senator" value="Eric Cartman"> Eric Cartman
+      <input type="radio" name="senator" value="Stan Smith"> Stan Smith
+  </form>
+
+  <h4>Choose who you would like to vote for Governor</h4>
+  <form id="governorForm" action="#n" name="governorForm">
+      <label for="governor">Governor:</label>
+      <input type="radio" name="governor" value="Marge Simpson"> Marge Simpson
+      <input type="radio" name="governor" value="Stewie Griffin"> Stewie Griffin
+      <input type="radio" name="governor" value="Kenny McCormick"> Kenny McCormick
+      <input type="radio" name="governor" value="Hayley Smith"> Hayley Smith
+  </form>
+
+  <br />
+  <br />
+  <br />
+
+  <input id="vote" type="submit" name="voteSubmit" value="Vote!">
 </form>
 
-<h4>The square root of your number is: <span id="rootResult"></span></h4>
 
-<script>
-    var port = "";
-    var url = 'ws://' + window.location.host + port + window.location
-        .pathname + 'squareRoot'
-
-    var ws = new WebSocket(url);
-
-    document.getElementById("findRoot").onclick = function(event){
-      event.preventDefault();
-      var base = document.getElementById("baseNumber").value;
-      ws.send(base);
-    };
-
-    ws.onconnect = function(e) {
-      console.log("Connected up!");
-    };
-
-    ws.onerror = function(e) {
-      console.log("Error somewhere: " + e);
-    };
-
-    ws.onclose = function(e) {
-      console.log("Host has closed the connection");
-      console.log(e);
-    };
-
-    ws.onmessage = function(e) {
-      document.getElementById("rootResult").innerHTML = e.data;
-    };
-
-
-
-</script>
 </body>
+
+<script type="text/javascript">
+
+    window.onload = function() {
+
+      var port = "";
+      var url = 'ws://' + window.location.host + port + window.location
+          .pathname + 'basicVote'
+
+      var ws = new WebSocket(url);
+
+      document.getElementById("vote").onclick = function(event){
+        event.preventDefault();
+        var govSelection = getRadioSelection("governor");
+        console.log("govSelection: " + govSelection);
+        var senSelection = getRadioSelection("senator");
+        console.log("senSelection: " + senSelection);
+
+        var regionSelection = getRegionSelection();
+
+        toSend = buildJsonToSend(govSelection, senSelection, regionSelection);
+
+        ws.send(JSON.stringify(toSend));
+      };
+
+      ws.onconnect = function(e) {
+        console.log("Connected up!");
+      };
+
+      ws.onerror = function(e) {
+        console.log("Error somewhere: " + e);
+      };
+
+      ws.onclose = function(e) {
+        console.log("Host has closed the connection");
+        console.log(e);
+      };
+
+      ws.onmessage = function(e) {
+        document.getElementById("rootResult").innerHTML = e.data;
+      };
+
+      function getRadioSelection() {
+        // Form id is passed as a parameter.
+        var formId = document.getElementsByName(arguments[0]);
+        var i;
+        for (i = 0; i < formId.length; i++) {
+          if (formId[i].checked) {
+            return formId[i].value
+          }
+        }
+      }
+
+      function getRegionSelection() {
+        regionElement = document.getElementById("regionNumbers");
+        return regionElement.selectedIndex;
+      }
+
+      function buildJsonToSend() {
+        var name = document.getElementById("voterName").value;
+        var age = document.getElementById("voterAge").value;
+
+        json = {"name": name, "age": age,"governorVote": arguments[0],
+            "senatorVote": arguments[1],  "regionSelection": arguments[2]};
+        console.log(json);
+        return json;
+      }
+    }
+</script>
