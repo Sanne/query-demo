@@ -1,6 +1,8 @@
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.lucene.index.Term;
+import org.apache.lucene.queries.TermFilter;
 import org.hibernate.search.query.facet.Facet;
 import org.infinispan.manager.DefaultCacheManager;
 import org.junit.AfterClass;
@@ -56,13 +58,15 @@ public class QueryServiceTest {
 		//Let's store some votes for Marge and for Stewie
 		int VOTES_MARGE = 17;
 		int VOTES_STEWIE = 42;
-		for (int i = 0; i < VOTES_MARGE; i++) {
-			voteForGovernor(CandidatesDatabase.MargeSimpson, i);
+		int VOTING_STATION_ID = 1;
+		int voteId = 0;
+		for (int i=0; i<VOTES_MARGE; i++) {
+			voteForGovernor(CandidatesDatabase.MargeSimpson, voteId++, VOTING_STATION_ID);
 		}
-		for (int i = 0; i < VOTES_STEWIE; i++) {
-			voteForGovernor(CandidatesDatabase.StewieGriffin, i + VOTES_MARGE);
+		for (int i=0; i<VOTES_STEWIE; i++) {
+			voteForGovernor(CandidatesDatabase.StewieGriffin, voteId++, VOTING_STATION_ID);
 		}
-		List<Facet> facets = votingCache.countVotesPerGovernor();
+		List<Facet> facets = votingCache.countVotesForGovernor();
 
 		// There are only votes for two candidates
 		Assert.assertEquals(2, facets.size());
@@ -77,9 +81,51 @@ public class QueryServiceTest {
 		Assert.assertEquals(CandidatesDatabase.MargeSimpson.name, facets.get(1).getValue());
 	}
 
-	private void voteForGovernor(GovernorCandidate governor, int i) {
+	@Test
+	public void testVotesPerRegion() {
+		//Let's store some votes for Marge and for Stewie
+		int VOTES_MARGE_AT_PLACE_ONE = 17;
+		int VOTES_STEWIE_AT_PLACE_ONE = 42;
+		int voteId = 0;
+
+		int VOTING_STATION_ID = 1;
+		for (int i=0; i<VOTES_MARGE_AT_PLACE_ONE; i++) {
+			voteForGovernor(CandidatesDatabase.MargeSimpson, voteId++, VOTING_STATION_ID);
+		}
+		for (int i=0; i<VOTES_STEWIE_AT_PLACE_ONE; i++) {
+			voteForGovernor(CandidatesDatabase.StewieGriffin, voteId++, VOTING_STATION_ID);
+		}
+
+		VOTING_STATION_ID = 2;
+		for (int i=0; i<10; i++) {
+			voteForGovernor(CandidatesDatabase.MargeSimpson, voteId++, VOTING_STATION_ID);
+		}
+		for (int i=0; i<10; i++) {
+			voteForGovernor(CandidatesDatabase.StewieGriffin, voteId++, VOTING_STATION_ID);
+		}
+
+		//Define a filter using Lucene's native API:
+		Term votingStationOne = new Term("votingStation", "1");
+		TermFilter filterOnStationOne = new TermFilter(votingStationOne);
+
+		List<Facet> facets = votingCache.countVotesForGovernor(filterOnStationOne);
+
+		// There are only votes for two candidates
+		Assert.assertEquals(2, facets.size());
+
+		// Top voted count is on top..
+		Assert.assertEquals(VOTES_STEWIE_AT_PLACE_ONE, facets.get(0).getCount());
+		// And the winner is...
+		Assert.assertEquals(CandidatesDatabase.StewieGriffin.name, facets.get(0).getValue());
+
+		// In second position we have:
+		Assert.assertEquals(VOTES_MARGE_AT_PLACE_ONE, facets.get(1).getCount());
+		Assert.assertEquals(CandidatesDatabase.MargeSimpson.name, facets.get(1).getValue());
+	}
+
+	private void voteForGovernor(GovernorCandidate governor, int i, int votingStationId) {
 		votingCache.storeVote("00"+i, 20 + i, "User "+i, CandidatesDatabase
-				.HomerSimpson, governor, "1");
+				.HomerSimpson, governor, String.valueOf(votingStationId) );
 	}
 
 }

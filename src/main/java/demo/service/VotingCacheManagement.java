@@ -3,6 +3,7 @@ package demo.service;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.lucene.search.Filter;
 import org.apache.lucene.search.Query;
 import org.hibernate.search.query.dsl.QueryBuilder;
 import org.hibernate.search.query.facet.Facet;
@@ -50,7 +51,7 @@ public class VotingCacheManagement {
 		cache.clear();
 	}
 
-	public List<Facet> countVotesPerGovernor() {
+	public List<Facet> countVotesForGovernor(Filter... filters) {
 		SearchManager searchManager = Search.getSearchManager( cache );
 		QueryBuilder queryBuilder = searchManager.buildQueryBuilderForClass(VotingCard.class).get();
 
@@ -68,6 +69,10 @@ public class VotingCacheManagement {
 		Query luceneQuery = queryBuilder.all().createQuery();
 
 		CacheQuery infinispanQuery = searchManager.getQuery( luceneQuery, VotingCard.class );
+
+		for (Filter f : filters) {
+			infinispanQuery.filter(f);
+		}
 		infinispanQuery.getFacetManager().enableFaceting(facetingRequest);
 
 		infinispanQuery.list(); // Perform the Query
