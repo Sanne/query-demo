@@ -61,7 +61,7 @@ public class VotingCacheManagement {
 
 		FacetingRequest facetingRequest = queryBuilder.facet()
 			.name( "Candidate Names" )
-			.onField( "governorVote.name" )
+			.onField( "governorVote.keyword_name" )
 			.discrete()
 			.orderedBy( FacetSortOrder.COUNT_DESC )
 			.createFacetingRequest();

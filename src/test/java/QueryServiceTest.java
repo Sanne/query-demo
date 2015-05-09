@@ -13,6 +13,7 @@ import org.junit.Test;
 
 import demo.GovernorCandidate;
 import demo.VotingCard;
+import demo.service.CandidateCacheDao;
 import demo.service.CandidatesDatabase;
 import demo.service.VotingCacheManagement;
 
@@ -20,11 +21,13 @@ public class QueryServiceTest {
 
 	private static DefaultCacheManager defaultCacheManager;
 	private static VotingCacheManagement votingCache;
+	private static CandidateCacheDao candidatesCache;
 
 	@BeforeClass
 	public static void startInfinispan() throws IOException {
 		defaultCacheManager = new DefaultCacheManager( "localonly-infinispan.xml" );
 		votingCache = new VotingCacheManagement(defaultCacheManager.getCache("Votes"));
+		candidatesCache = new CandidateCacheDao(defaultCacheManager.getCache("Candidates"));
 	}
 
 	@AfterClass
@@ -51,6 +54,34 @@ public class QueryServiceTest {
 			Assert.assertNotNull(vote);
 			Assert.assertEquals("Marge Simpson", vote.governorVote.name);
 		}
+	}
+
+	@Test
+	public void testFindAllCandidates() {
+		candidatesCache.prefillWithTestData();
+		List<?> searchResult = candidatesCache.findAllCandidates();
+		Assert.assertEquals(8, searchResult.size());
+	}
+
+	@Test
+	public void testFindCandidatesByName() {
+		candidatesCache.prefillWithTestData();
+		List<?> searchResult = candidatesCache.findCandidatedByAny("simpson");
+		Assert.assertEquals(2, searchResult.size());
+	}
+
+	@Test
+	public void testFindCandidatesByParty() {
+		candidatesCache.prefillWithTestData();
+		List<?> searchResult = candidatesCache.findCandidatedByAny("family guy");
+		Assert.assertEquals(2, searchResult.size());
+	}
+
+	@Test
+	public void testFindCandidatesByPartyOrName() {
+		candidatesCache.prefillWithTestData();
+		List<?> searchResult = candidatesCache.findCandidatedByAny("simpson hates the family guy");
+		Assert.assertEquals(4, searchResult.size());
 	}
 
 	@Test
