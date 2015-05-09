@@ -3,6 +3,7 @@ package demo;
 import org.infinispan.Cache;
 import org.infinispan.manager.DefaultCacheManager;
 import org.infinispan.manager.EmbeddedCacheManager;
+import org.jboss.logging.Logger;
 
 import java.io.IOException;
 
@@ -15,6 +16,8 @@ public class VotingCacheManager {
 
 	private Cache<String, VotingCard> cache;
 	private static VotingCacheManager instance;
+	private static final Logger logger = Logger
+			.getLogger(VotingCacheManager.class);
 
 	private VotingCacheManager() {
 		EmbeddedCacheManager cacheManager = null;
@@ -26,7 +29,6 @@ public class VotingCacheManager {
 					"for Infinispan");
 		}
 		this.cache = cacheManager.getCache("Votes", true);
-
 	}
 
 	public Cache<String, VotingCard> getCache() {

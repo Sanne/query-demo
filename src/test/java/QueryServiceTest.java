@@ -97,7 +97,7 @@ public class QueryServiceTest {
 		for (int i=0; i<VOTES_STEWIE; i++) {
 			voteForGovernor(CandidatesDatabase.StewieGriffin, voteId++, VOTING_STATION_ID);
 		}
-		List<Facet> facets = votingCache.countVotesForGovernor();
+		List<Facet> facets = votingCache.countVotes("governorVote");
 
 		// There are only votes for two candidates
 		Assert.assertEquals(2, facets.size());
@@ -139,7 +139,8 @@ public class QueryServiceTest {
 		Term votingStationOne = new Term("votingStation", "1");
 		TermFilter filterOnStationOne = new TermFilter(votingStationOne);
 
-		List<Facet> facets = votingCache.countVotesForGovernor(filterOnStationOne);
+		List<Facet> facets = votingCache.countVotes
+				("governorVote", filterOnStationOne);
 
 		// There are only votes for two candidates
 		Assert.assertEquals(2, facets.size());
