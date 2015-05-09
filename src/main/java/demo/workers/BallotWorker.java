@@ -1,11 +1,10 @@
 package demo.workers;
 
-import demo.Candidate;
-import demo.GovernorCandidate;
-import demo.SenatorCandidate;
+import demo.*;
 import demo.service.CandidatesDatabase;
 import demo.service.VotingCacheManagement;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.infinispan.Cache;
 import org.jboss.logging.Logger;
 
 import java.util.Map;
@@ -35,6 +34,11 @@ public class BallotWorker {
    public BallotWorker() {
       // Instantiate fields.
       mapper = new ObjectMapper();
+
+      Cache<String, VotingCard> c = VotingCacheManager
+            .getInstance().getCache();
+      vcm = new VotingCacheManagement(c);
+
    }
 
 
@@ -51,14 +55,24 @@ public class BallotWorker {
       String governorVoteName = (String) parsed.get("governorVote");
       String senatorVoteName = (String) parsed.get("senateVote");
 
+      // A bit of work to be done for the station.
+      Object stationObj = parsed.get("regionSelection");
+      String station = null;
+      if (stationObj instanceof Integer) {
+         Integer stationInt = (Integer) stationObj;
+         station = Integer.toString(stationInt);
+      }
+
       GovernorCandidate gov = (GovernorCandidate)
             getCandidateFromName(governorVoteName);
       SenatorCandidate sen = (SenatorCandidate)
             getCandidateFromName(senatorVoteName);
 
       String idCardNumber = generateCardNumber(voterName);
+      logger.info("Generated ID card number for " + voterName + " to be: " +
+            idCardNumber);
       // Last of all, put it through the vcm
-      vcm.storeVote(idCardNumber, voterAge, voterName, sen, gov);
+      vcm.storeVote(idCardNumber, voterAge, voterName, sen, gov, station);
 
    }
 
@@ -67,7 +81,7 @@ public class BallotWorker {
       // generated number between 0-10k
       long random = Math.round(Math.random() * 10000);
       String stringRep = String.format("%05d", random);
-      String prefix = voterName.substring(0, 2);
+      String prefix = voterName.substring(0, 2).toUpperCase();
       return prefix.concat(stringRep);
    }
 
@@ -99,7 +113,6 @@ public class BallotWorker {
          case "Stan Smith":
             toReturn = CandidatesDatabase.StanSmith;
             break;
-
          default:
             throw new IllegalArgumentException("Wrong string parameter passed");
       }

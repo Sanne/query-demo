@@ -58,6 +58,13 @@
       </dependency>
 
       <dependency>
+         <groupId>javax</groupId>
+         <artifactId>javaee-api</artifactId>
+         <version>7.0</version>
+         <scope>provided</scope>
+      </dependency>
+
+      <dependency>
          <groupId>junit</groupId>
          <artifactId>junit</artifactId>
          <version>4.11</version>
@@ -80,8 +87,9 @@
                <archive>
                   <manifestEntries>
                      <Dependencies>
-                        org.infinispan,
-                        org.infinispan.query,
+                        org.infinispan export,
+                        org.infinispan.commons export,
+                        org.infinispan.query export,
                         org.codehaus.jackson.jackson-xc,
                         org.codehaus.jackson.jackson-mapper-asl
                      </Dependencies>
