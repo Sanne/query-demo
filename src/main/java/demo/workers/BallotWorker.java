@@ -35,7 +35,7 @@ public class BallotWorker {
       mapper = new ObjectMapper();
 
       Cache<String, VotingCard> c = VotingCacheManager
-            .getInstance().getCache();
+            .getInstance().getVotingCache();
       vcm = new VotingCacheDao(c);
 
    }

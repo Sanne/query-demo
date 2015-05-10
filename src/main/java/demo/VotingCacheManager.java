@@ -9,7 +9,8 @@ import java.io.IOException;
 
 public class VotingCacheManager {
 
-	private Cache<String, VotingCard> cache;
+	private Cache<String, VotingCard> votingCache;
+	private Cache<String, Candidate> candidateCache;
 	private static VotingCacheManager instance;
 	private static final Logger logger = Logger
 			.getLogger(VotingCacheManager.class);
@@ -23,11 +24,16 @@ public class VotingCacheManager {
 			throw new InstantiationError("Error looking up configuration file " +
 					"for Infinispan");
 		}
-		this.cache = cacheManager.getCache("Votes", true);
+		this.votingCache = cacheManager.getCache("Votes", true);
+		this.candidateCache = cacheManager.getCache("Candidates", true);
 	}
 
-	public Cache<String, VotingCard> getCache() {
-		return this.cache;
+	public Cache<String, VotingCard> getVotingCache() {
+		return this.votingCache;
+	}
+
+	public Cache<String, Candidate> getCandidateCache() {
+		return candidateCache;
 	}
 
 	public static VotingCacheManager getInstance() {
@@ -36,5 +42,4 @@ public class VotingCacheManager {
 		}
 		return instance;
 	}
-
 }

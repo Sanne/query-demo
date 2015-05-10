@@ -25,9 +25,13 @@ public class CandidateCacheDao {
 				.get();
 	}
 
-	public void prefillWithTestData() {
+	public void prefill() {
 		cache.clear();
 		cache.putAll(CandidatesDatabase.allcandidates);
+	}
+
+	public boolean isEmpty() {
+		return cache.isEmpty();
 	}
 
 	public List<?> findCandidatedByAny(String userinput) {
