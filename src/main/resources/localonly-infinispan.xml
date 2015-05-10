@@ -18,6 +18,13 @@
          </indexing>
       </local-cache>
 
+      <local-cache name="Candidates">
+         <transaction mode="NONE"/>
+         <indexing index="ALL">
+            <property name="default.directory_provider">ram</property>
+         </indexing>
+      </local-cache>
+
    </cache-container>
 
 </infinispan>

@@ -58,28 +58,28 @@ public class QueryServiceTest {
 
 	@Test
 	public void testFindAllCandidates() {
-		candidatesCache.prefillWithTestData();
+		candidatesCache.prefill();
 		List<?> searchResult = candidatesCache.findAllCandidates();
 		Assert.assertEquals(8, searchResult.size());
 	}
 
 	@Test
 	public void testFindCandidatesByName() {
-		candidatesCache.prefillWithTestData();
+		candidatesCache.prefill();
 		List<?> searchResult = candidatesCache.findCandidatedByAny("simpson");
 		Assert.assertEquals(2, searchResult.size());
 	}
 
 	@Test
 	public void testFindCandidatesByParty() {
-		candidatesCache.prefillWithTestData();
+		candidatesCache.prefill();
 		List<?> searchResult = candidatesCache.findCandidatedByAny("family guy");
 		Assert.assertEquals(2, searchResult.size());
 	}
 
 	@Test
 	public void testFindCandidatesByPartyOrName() {
-		candidatesCache.prefillWithTestData();
+		candidatesCache.prefill();
 		List<?> searchResult = candidatesCache.findCandidatedByAny("simpson hates the family guy");
 		Assert.assertEquals(4, searchResult.size());
 	}

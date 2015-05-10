@@ -17,7 +17,7 @@ public class ResultWorker {
    public ResultWorker() {
       // Instantiate fields.
       Cache<String, VotingCard> c = VotingCacheManager
-            .getInstance().getCache();
+            .getInstance().getVotingCache();
       votingCache = new VotingCacheDao(c);
 
    }

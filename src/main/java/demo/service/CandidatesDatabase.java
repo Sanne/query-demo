@@ -26,7 +26,7 @@ public class CandidatesDatabase {
 	public final static GovernorCandidate KennyMcCormick = new GovernorCandidate(
 			"Kenny McCormick", "South Park");
 	public final static GovernorCandidate HayleySmith = new GovernorCandidate(
-			"Hayley Smith ", "American Dad");
+			"Hayley Smith", "American Dad");
 
 	public final static Map<String, Candidate> allcandidates = initializeAllCandidates();
 
