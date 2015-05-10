@@ -2,26 +2,23 @@ package demo.workers;
 
 import demo.VotingCacheManager;
 import demo.VotingCard;
-import demo.service.VotingCacheManagement;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
+import demo.service.VotingCacheDao;
 import org.hibernate.search.query.facet.Facet;
 import org.infinispan.Cache;
 import org.jboss.logging.Logger;
 
-import java.io.IOException;
 import java.util.List;
 
 public class ResultWorker {
 
    private static final Logger logger = Logger.getLogger(ResultWorker.class);
-   private VotingCacheManagement vcm;
+   private VotingCacheDao votingCache;
 
    public ResultWorker() {
       // Instantiate fields.
       Cache<String, VotingCard> c = VotingCacheManager
             .getInstance().getCache();
-      vcm = new VotingCacheManagement(c);
+      votingCache = new VotingCacheDao(c);
 
    }
 
@@ -35,7 +32,7 @@ public class ResultWorker {
                "for.");
       }
       logger.info("Obtaining result for election type: " + electionType);
-      List<Facet> facets = vcm.countVotes(electionType);
+      List<Facet> facets = votingCache.countVotes(electionType);
       // We need to return a String of the form:
 
       StringBuilder builder = new StringBuilder();

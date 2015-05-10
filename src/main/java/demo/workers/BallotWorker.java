@@ -2,7 +2,7 @@ package demo.workers;
 
 import demo.*;
 import demo.service.CandidatesDatabase;
-import demo.service.VotingCacheManagement;
+import demo.service.VotingCacheDao;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.infinispan.Cache;
 import org.jboss.logging.Logger;
@@ -23,13 +23,12 @@ import java.util.Map;
  *    "senateVote":"senatorVoteName",
  *    "regionSelection":1
  *    }
- * @author - @navssurtani
  */
 public class BallotWorker {
 
    private static final Logger logger = Logger.getLogger(BallotWorker.class);
    private ObjectMapper mapper;
-   private VotingCacheManagement vcm;
+   private VotingCacheDao vcm;
 
    public BallotWorker() {
       // Instantiate fields.
@@ -37,7 +36,7 @@ public class BallotWorker {
 
       Cache<String, VotingCard> c = VotingCacheManager
             .getInstance().getCache();
-      vcm = new VotingCacheManagement(c);
+      vcm = new VotingCacheDao(c);
 
    }
 

@@ -10,10 +10,6 @@ import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 
-/**
- * @author - @navssurtani
- */
-
 @ServerEndpoint("/basicVote")
 public class BasicVoteService {
 

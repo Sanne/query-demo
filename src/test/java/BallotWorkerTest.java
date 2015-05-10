@@ -9,9 +9,6 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-/**
- * @author - @navssurtani
- */
 public class BallotWorkerTest {
 
 	private static DefaultCacheManager defaultCacheManager;
