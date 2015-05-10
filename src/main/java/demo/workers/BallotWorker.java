@@ -85,10 +85,10 @@ public class BallotWorker {
       return prefix.concat(stringRep);
    }
 
-   private Candidate getCandidateFromName(String governorVoteName) {
+   private Candidate getCandidateFromName(String candidateName) {
       Candidate toReturn;
 
-      switch (governorVoteName) {
+      switch (candidateName) {
          case "Marge Simpson":
             toReturn = CandidatesDatabase.MargeSimpson;
             break;

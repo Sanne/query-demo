@@ -37,7 +37,7 @@ public class VotingCacheManagement {
 	public void storeVote(String idCardNumber, int voterAge, String voterName,
 								 SenatorCandidate voteForSenate,
 								 GovernorCandidate voteForGovernor, String station) {
-		logger.info("About to store vote from " + idCardNumber + " in cache.");
+		logger.debug("About to store vote from " + idCardNumber + " in cache.");
 		VotingCard card = new VotingCard(voteForSenate, voteForGovernor, voterAge,
 				voterName, new Date(), station);
 		storeVote( idCardNumber, card );
@@ -51,9 +51,12 @@ public class VotingCacheManagement {
 		cache.clear();
 	}
 
-	public List<Facet> countVotesForGovernor(Filter... filters) {
+	public List<Facet> countVotes(String electionType, Filter...
+			filters) {
 		SearchManager searchManager = Search.getSearchManager( cache );
 		QueryBuilder queryBuilder = searchManager.buildQueryBuilderForClass(VotingCard.class).get();
+
+		String fieldName = electionType.concat(".keyword_name");
 
 		//Two things are going to happen here:
 		// - a full-text query on the data grid
@@ -61,7 +64,7 @@ public class VotingCacheManagement {
 
 		FacetingRequest facetingRequest = queryBuilder.facet()
 			.name( "Candidate Names" )
-			.onField( "governorVote.keyword_name" )
+			.onField( fieldName )
 			.discrete()
 			.orderedBy( FacetSortOrder.COUNT_DESC )
 			.createFacetingRequest();
