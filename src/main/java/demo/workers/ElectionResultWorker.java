@@ -9,12 +9,13 @@ import org.jboss.logging.Logger;
 
 import java.util.List;
 
-public class ResultWorker {
+public class ElectionResultWorker extends AbstractResultWorker {
 
-   private static final Logger logger = Logger.getLogger(ResultWorker.class);
+   private static final Logger logger = Logger
+         .getLogger(ElectionResultWorker.class);
    private VotingCacheDao votingCache;
 
-   public ResultWorker() {
+   public ElectionResultWorker() {
       // Instantiate fields.
       Cache<String, VotingCard> c = VotingCacheManager
             .getInstance().getVotingCache();
@@ -24,7 +25,6 @@ public class ResultWorker {
 
    public String result(String electionType) throws IllegalArgumentException {
       // Should be either "senateVote" or "governorVote". VALIDATE!!
-
       if (!electionType.equals("senateVote") && !electionType.equals
             ("governorVote")) {
          throw new IllegalArgumentException("You have passed an illegal " +
@@ -33,25 +33,7 @@ public class ResultWorker {
       }
       logger.info("Obtaining result for election type: " + electionType);
       List<Facet> facets = votingCache.countVotes(electionType);
-      // We need to return a String of the form:
-
-      StringBuilder builder = new StringBuilder();
-      builder.append("{\"electionType\": \"");
-      builder.append(electionType);
-      builder.append("\", \"candidates\": [");
-
-      for (Facet f : facets) {
-         builder.append("{\"name\": \"");
-         builder.append(f.getValue());
-         builder.append("\", \"votes\": \"");
-         builder.append(f.getCount());
-         builder.append("\"}, ");
-      }
-      // Remove the trailing comma.
-      builder.deleteCharAt(builder.length() - 2);
-      builder.append("]}");
-
-      return builder.toString();
+      return stringResultsFromFacets(facets, electionType);
    }
 
 }

@@ -7,6 +7,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.infinispan.Cache;
 import org.jboss.logging.Logger;
 
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -41,7 +42,7 @@ public class BallotWorker {
    }
 
 
-   public void work(String data) throws Exception {
+   public void work(String data) throws IOException {
       // Parse the JSON String into a Map<String, Object>
       Map<String, Object> parsed = mapper.readValue(data, Map.class);
       logger.debug("Parsed String into Map using JSON parser");

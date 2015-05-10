@@ -51,8 +51,7 @@ public class VotingCacheDao {
 		cache.clear();
 	}
 
-	public List<Facet> countVotes(String electionType, Filter...
-			filters) {
+	public List<Facet> countVotes(String electionType, Filter... filters) {
 		SearchManager searchManager = Search.getSearchManager( cache );
 		QueryBuilder queryBuilder = searchManager.buildQueryBuilderForClass(VotingCard.class).get();
 

@@ -1,6 +1,6 @@
 package demo.service;
 
-import demo.workers.ResultWorker;
+import demo.workers.ElectionResultWorker;
 import org.jboss.logging.Logger;
 
 import javax.websocket.OnMessage;
@@ -17,7 +17,7 @@ public class ElectionResultService {
    public void onMessage(String message, Session session) {
       // The message here is just the name of the election type.
       // The choices should be either 'governor' or 'senate'
-      ResultWorker worker = new ResultWorker();
+      ElectionResultWorker worker = new ElectionResultWorker();
       String result;
       try {
          result = worker.result(message);
