@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:ng="http://angularjs.org" id="ng-app" ng-app="query-demo">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Election results!</title>
+</head>
+
+<body>
+
+<h3>Let's get the election results <strong>for a region!</strong></h3>
+
+<select name="regionNumbers" id="regionNumbers" style="width: 100px">
+  <option value="0">0</option>
+  <option value="1">1</option>
+  <option value="2">2</option>
+  <option value="3">3</option>
+</select>
+
+<input id="electionResults" type="submit" name="electionResults" value="Get Election Results!">
+<br />
+<br />
+
+<h4>Senate results</h4>
+<div id="senateResultsTable">
+</div>
+
+<br />
+<br />
+
+<h4>Governor results</h4>
+<div id="governorResultsTable">
+</div>
+
+<br/>
+<br/>
+
+</body>
+
+<script type="text/javascript">
+
+    window.onload = function() {
+
+      var port = "";
+      var url = 'ws://' + window.location.host + port + '/ispn-query-demo/regionResult';
+
+      var ws = new WebSocket(url);
+
+      document.getElementById("electionResults").onclick = function(event){
+        var pollingStation = getpollingStation();
+        console.log("Polling station: " + pollingStation);
+        var senateJson = {"pollingStation": pollingStation, "electionType": "senateVote"};
+        var govJson = {"pollingStation": pollingStation, "electionType": "governorVote"};
+
+        ws.send(JSON.stringify(senateJson));
+        ws.send(JSON.stringify(govJson));
+      };
+
+      ws.onconnect = function(e) {
+        console.log("Connected up!");
+      };
+
+      ws.onerror = function(e) {
+        console.log("Error somewhere: " + e);
+      };
+
+      ws.onclose = function(e) {
+        console.log("Host has closed the connection");
+        console.log(e);
+      };
+
+      ws.onmessage = function(e) {
+        result = JSON.parse(e.data);
+        console.log(result);
+        var electionType = result.electionType;
+        var tableToInsert = buildInnerHtml(result.candidates);
+
+        if (electionType === "senateVote") {
+          document.getElementById("senateResultsTable").innerHTML = tableToInsert;
+        };
+
+        if (electionType === "governorVote") {
+          document.getElementById("governorResultsTable").innerHTML = tableToInsert;
+        };
+
+      };
+
+      function buildInnerHtml() {
+        var candidates = arguments[0];
+        console.log(candidates);
+
+        var tagTableEntryOpen = "<td style='width: 100px; text-align: left;'>";
+        var tagTableEntryClose = "</td>"
+
+        // Will be a table with two columns.
+        var tableString = "<table>";
+        tableString += "<tr><td style='width: 100px; color: red; text-align: left;'>Candidate</td>";
+        tableString += "<td style='width: 100px; color: red; text-align: left;'>Votes</td></tr>";
+
+        tableString += "<tr>" + tagTableEntryOpen + "---------------" + tagTableEntryClose;
+        tableString += tagTableEntryOpen + "---------------" + tagTableEntryClose + "</tr>";
+
+        for (var i = 0; i < candidates.length; i++) {
+            var c = candidates[i];
+            tableString += "<tr>" + tagTableEntryOpen + c.name + tagTableEntryClose;
+            tableString += tagTableEntryOpen + c.votes + tagTableEntryClose + "</tr>";
+        }
+
+        tableString += "</table>";
+        return tableString;
+      }
+
+      function getpollingStation() {
+        regionElement = document.getElementById("regionNumbers");
+        return regionElement.selectedIndex;
+      };
+
+
+    }
+</script>
