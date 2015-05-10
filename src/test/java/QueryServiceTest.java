@@ -15,18 +15,18 @@ import demo.GovernorCandidate;
 import demo.VotingCard;
 import demo.service.CandidateCacheDao;
 import demo.service.CandidatesDatabase;
-import demo.service.VotingCacheManagement;
+import demo.service.VotingCacheDao;
 
 public class QueryServiceTest {
 
 	private static DefaultCacheManager defaultCacheManager;
-	private static VotingCacheManagement votingCache;
+	private static VotingCacheDao votingCache;
 	private static CandidateCacheDao candidatesCache;
 
 	@BeforeClass
 	public static void startInfinispan() throws IOException {
 		defaultCacheManager = new DefaultCacheManager( "localonly-infinispan.xml" );
-		votingCache = new VotingCacheManagement(defaultCacheManager.getCache("Votes"));
+		votingCache = new VotingCacheDao(defaultCacheManager.getCache("Votes"));
 		candidatesCache = new CandidateCacheDao(defaultCacheManager.getCache("Candidates"));
 	}
 

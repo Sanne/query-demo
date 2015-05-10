@@ -20,13 +20,13 @@ import demo.VotingCard;
 import org.jboss.logging.Logger;
 
 
-public class VotingCacheManagement {
+public class VotingCacheDao {
 
 	private final Cache<String, VotingCard> cache;
 	private static final Logger logger = Logger.getLogger
-			(VotingCacheManagement.class);
+			(VotingCacheDao.class);
 
-	public VotingCacheManagement(Cache<String, VotingCard> cache) {
+	public VotingCacheDao(Cache<String, VotingCard> cache) {
 		this.cache = cache;
 	}
 

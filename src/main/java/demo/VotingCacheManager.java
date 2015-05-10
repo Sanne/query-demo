@@ -7,11 +7,6 @@ import org.jboss.logging.Logger;
 
 import java.io.IOException;
 
-
-/**
- * @author - Sanne Grinovero
- * @author - @navssurtani
- */
 public class VotingCacheManager {
 
 	private Cache<String, VotingCard> cache;
